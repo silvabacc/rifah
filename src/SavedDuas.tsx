@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { SavedDua } from "./types";
-import { Card, Space } from "antd";
+import { Card } from "antd";
+import Masonry from "react-masonry-css";
+import "./SavedDuas.css";
 
 const SavedDuas = () => {
   const { getSavedDua } = useLocalStorage();
@@ -13,18 +15,32 @@ const SavedDuas = () => {
   }, []);
 
   return (
-    <Space direction="vertical" className="w-full" size="middle">
+    <Masonry
+      className="my-masonry-grid"
+      columnClassName="my-masonry-grid_column"
+      breakpointCols={3}
+    >
       {cards.map((card, index) => (
-        <Card title={card.duaName} key={`${card.duaName}-${index}`}>
-          {card.duas.map((dua, index) => (
-            <div key={index}>
-              <p>{dua.arabic}</p>
-              <p>{dua.translation}</p>
-            </div>
-          ))}
-        </Card>
+        <div
+          className="rounded border border-transparent group transition-all duration-300"
+          key={`${card.duaName}-${index}`}
+        >
+          <Card
+            hoverable
+            title={
+              <div className="group-hover:text-violet-300">{card.duaName}</div>
+            }
+          >
+            {card.duas.map((dua, index) => (
+              <div key={index} className="group-hover:text-violet-300">
+                <p>{dua.arabic}</p>
+                <p>{dua.translation}</p>
+              </div>
+            ))}
+          </Card>
+        </div>
       ))}
-    </Space>
+    </Masonry>
   );
 };
 

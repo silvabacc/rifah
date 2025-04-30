@@ -30,6 +30,7 @@ function App() {
       <Tabs
         activeKey={activeKey}
         centered
+        destroyInactiveTabPane
         items={items}
         onTabClick={(key) => setActiveKey(key)}
       />

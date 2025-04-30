@@ -70,12 +70,7 @@ export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
         />
       )}
       <div className="flex gap-4 pt-4">
-        <Column
-          searachable
-          column="duas"
-          cards={duaCards}
-          setCards={setDuaCards}
-        />
+        <Column column="duas" cards={duaCards} setCards={setDuaCards} />
         <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
       </div>
     </div>
@@ -233,7 +228,7 @@ const MotionCard = ({ dua, id, column, handleDragStart }: CardProps) => (
       onDragStart={(e) => handleDragStart(e, { dua, id, column })}
       className="cursor-grab active:cursor-grabbing"
     >
-      <Card title={dua.title}>
+      <Card hoverable title={dua.title}>
         <p className="text-sm">{dua.arabic}</p>
         <p className="text-sm">{dua.translation}</p>
         <Divider className="my-2" />
