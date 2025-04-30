@@ -1,18 +1,21 @@
 import { Tabs, TabsProps } from "antd";
 import CreateDua from "./CreateDua";
-import MyDuas from "./MyDuas";
+import SavedDuas from "./SavedDuas";
+import { useState } from "react";
 
 function App() {
+  const [activeKey, setActiveKey] = useState("1");
+
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Create a dua",
-      children: <CreateDua />,
+      children: <CreateDua onSaveDua={() => setActiveKey("2")} />,
     },
     {
       key: "2",
-      label: "My duas",
-      children: <MyDuas />,
+      label: "Saved duas",
+      children: <SavedDuas />,
     },
   ];
 
@@ -24,7 +27,12 @@ function App() {
       <p className="text-shadow-lg text-shadow-neutral-600">
         Create your own <span className="text-violet-400">beautiful</span> dua
       </p>
-      <Tabs centered items={items} />
+      <Tabs
+        activeKey={activeKey}
+        centered
+        items={items}
+        onTabClick={(key) => setActiveKey(key)}
+      />
     </div>
   );
 }

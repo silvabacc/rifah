@@ -7,7 +7,10 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 
 const { Search } = Input;
 
-export default function CreateDua() {
+type CreateDuaProps = {
+  onSaveDua?: () => void;
+};
+export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
   const { saveDua } = useLocalStorage();
   const [duaCards, setDuaCards] = useState<CardType[]>([]);
   const [duaName, setDuaName] = useState("");
@@ -27,7 +30,7 @@ export default function CreateDua() {
       setError("Please name your dua");
       return;
     }
-    const selected = duaCards.filter((c) => c.column === "mydua");
+    const selected = duaCards.filter((c) => c.column === "savedduas");
     if (selected.length === 0) {
       setError("You haven't selected any duas");
       return;
@@ -38,6 +41,7 @@ export default function CreateDua() {
     );
     setDuaName("");
     setError("");
+    onSave?.();
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +76,7 @@ export default function CreateDua() {
           cards={duaCards}
           setCards={setDuaCards}
         />
-        <Column column="mydua" cards={duaCards} setCards={setDuaCards} />
+        <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
       </div>
     </div>
   );
@@ -252,7 +256,7 @@ const DropIndicator = ({ beforeId, column }: DropIndicatorProps) => (
   />
 );
 
-type ColumnType = "duas" | "mydua";
+type ColumnType = "duas" | "savedduas";
 
 type CardType = {
   dua: Dua;
