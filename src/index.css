@@ -25,10 +25,8 @@ a:hover {
 }
 
 body {
+  width: 100vw;
   margin: 2rem;
-  display: flex;
-  place-self: center;
-  min-height: 100vh;
 }
 
 h1 {

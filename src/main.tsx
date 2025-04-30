@@ -8,7 +8,7 @@ createRoot(document.getElementById("root")!).render(
     theme={{
       algorithm: theme.darkAlgorithm,
       token: {
-        colorPrimary: "#DBB1FF",
+        colorPrimary: "#a790d4",
       },
     }}
   >
