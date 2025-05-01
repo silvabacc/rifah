@@ -4,6 +4,7 @@ import { SavedDua } from "./types";
 import { Card } from "antd";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
+import DuaCard from "./components/DuaCard";
 
 const SavedDuas = () => {
   const { getSavedDua } = useLocalStorage();
@@ -25,19 +26,7 @@ const SavedDuas = () => {
           className="rounded border border-transparent group transition-all duration-300"
           key={`${card.duaName}-${index}`}
         >
-          <Card
-            hoverable
-            title={
-              <div className="group-hover:text-violet-300">{card.duaName}</div>
-            }
-          >
-            {card.duas.map((dua, index) => (
-              <div key={index} className="group-hover:text-violet-300">
-                <p>{dua.arabic}</p>
-                <p>{dua.translation}</p>
-              </div>
-            ))}
-          </Card>
+          <DuaCard title={card.duaName} dua={card.dua} />
         </div>
       ))}
     </Masonry>

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Dua } from "./types";
 import { Alert, Button, Card, Divider, Input } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import DuaCard from "./components/DuaCard";
 
 const { Search } = Input;
 
@@ -226,14 +227,9 @@ const MotionCard = ({ dua, id, column, handleDragStart }: CardProps) => (
       layoutId={id}
       draggable
       onDragStart={(e) => handleDragStart(e, { dua, id, column })}
-      className="cursor-grab active:cursor-grabbing"
+      className="group transition-all duration-300 cursor-grab active:cursor-grabbing"
     >
-      <Card hoverable title={dua.title}>
-        <p className="text-sm">{dua.arabic}</p>
-        <p className="text-sm">{dua.translation}</p>
-        <Divider className="my-2" />
-        <p className="text-sm text-neutral-500">{dua.source}</p>
-      </Card>
+      <DuaCard dua={dua} />
     </motion.div>
   </>
 );

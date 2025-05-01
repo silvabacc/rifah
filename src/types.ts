@@ -10,4 +10,5 @@ export type Dua = {
 export type SavedDua = {
   duaName: string;
   duas: Dua[];
+  dua: Dua;
 };
