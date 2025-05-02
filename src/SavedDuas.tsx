@@ -54,7 +54,12 @@ const SavedDuas = () => {
           <p>{duaSelected?.dua.arabic}</p>
           <Divider />
           <p>{duaSelected?.dua.translation}</p>
-          <Button className="mt-4 self-end">Edit</Button>
+        </div>
+        <div className="flex justify-end space-x-2 w-full">
+          <Button className="mt-4">Edit</Button>
+          <Button type="primary" className="mt-4">
+            Close
+          </Button>
         </div>
       </Modal>
     </Masonry>
