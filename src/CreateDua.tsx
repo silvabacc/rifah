@@ -2,11 +2,17 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import duasJson from "./data/duas.json";
 import { motion } from "framer-motion";
 import { Dua } from "./types";
-import { Alert, Button, Card, Divider, Input } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import DuaCard from "./components/DuaCard";
-
-const { Search } = Input;
+import {
+  Alert,
+  Box,
+  Button,
+  Group,
+  HStack,
+  Input,
+  Stack,
+} from "@chakra-ui/react";
 
 type CreateDuaProps = {
   onSaveDua?: () => void;
@@ -51,30 +57,31 @@ export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex">
+    <Stack>
+      <Group className="w-full">
         <Input
           value={duaName}
           onChange={onChange}
           placeholder="Dua name"
           className="flex-1"
         />
-        <Button className="ml-2" onClick={onSaveDua}>
-          Save Dua
-        </Button>
-      </div>
+        <Button onClick={onSaveDua}>Save Dua</Button>
+      </Group>
       {error && (
-        <Alert
-          type="error"
-          className="border rounded-sm border-red-500"
-          message={error}
-        />
+        <Alert.Root status={"error"}>
+          <Alert.Indicator />
+          <Alert.Title>{error}</Alert.Title>
+        </Alert.Root>
       )}
-      <div className="flex gap-4 pt-4">
-        <Column column="duas" cards={duaCards} setCards={setDuaCards} />
-        <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
-      </div>
-    </div>
+      <Stack direction={"row"}>
+        <Box height="max" flex={1}>
+          <Column column="duas" cards={duaCards} setCards={setDuaCards} />
+        </Box>
+        <Box height={"max"} flex={1}>
+          <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
+        </Box>
+      </Stack>
+    </Stack>
   );
 }
 
@@ -186,14 +193,14 @@ const Column = ({ cards, column, searachable, setCards }: ColumnProps) => {
 
   return (
     <div className="w-1/2">
-      <div
+      <Stack
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`relative h-full  transition-colors space-y-4`}
+        className={`relative h-full transition-colors space-y-4`}
       >
         {searachable && (
-          <Search
+          <Input
             onChange={(v) => setSearchQuery(v.currentTarget.value)}
             placeholder="Search"
           />
@@ -204,13 +211,13 @@ const Column = ({ cards, column, searachable, setCards }: ColumnProps) => {
 
         {showDragDropBox && (
           <div className="flex items-center cursor-default justify-center">
-            <p className="text-neutral-500 font-bold text-lg">
+            <p className="text-neutral-500 font-bold">
               Drag and drop duas here
             </p>
           </div>
         )}
         <DropIndicator beforeId={null} column={column} />
-      </div>
+      </Stack>
     </div>
   );
 };

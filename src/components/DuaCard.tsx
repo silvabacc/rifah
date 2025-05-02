@@ -1,4 +1,4 @@
-import { Card, Divider } from "antd";
+import { Card } from "@chakra-ui/react";
 import { Dua } from "../types";
 
 /**
@@ -10,16 +10,17 @@ type DuaCardProps = {
 };
 export default function DuaCard({ dua }: DuaCardProps) {
   return (
-    <Card
-      hoverable
-      title={<div className="group-hover:text-violet-300">{dua.title}</div>}
-    >
-      <div className="group-hover:text-violet-300">
-        <p className="text-sm">{dua.arabic}</p>
-        <p className="text-sm">{dua.translation}</p>
-        <Divider className="my-2" />
-        <p className="text-sm text-neutral-500">{dua.source}</p>
-      </div>
-    </Card>
+    <Card.Root>
+      <Card.Body className="group-hover:text-violet-300" gap="2">
+        <Card.Title className="">{dua.title}</Card.Title>
+        <Card.Description className="group-hover:text-violet-300">
+          <span>{dua.arabic}</span>
+          <span>{dua.translation}</span>
+        </Card.Description>
+        <Card.Footer>
+          <p className="group-hover:text-violet-300">{dua.source}</p>
+        </Card.Footer>
+      </Card.Body>
+    </Card.Root>
   );
 }

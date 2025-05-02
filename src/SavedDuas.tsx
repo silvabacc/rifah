@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { SavedDua } from "./types";
-import { Card } from "antd";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
 import DuaCard from "./components/DuaCard";

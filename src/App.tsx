@@ -1,40 +1,46 @@
-import { Tabs, TabsProps } from "antd";
+import { Heading, Tabs, VStack, Highlight } from "@chakra-ui/react";
 import CreateDua from "./CreateDua";
 import SavedDuas from "./SavedDuas";
 import { useState } from "react";
+import { colors } from "./colors";
+
+enum KeyTypes {
+  CreateDua = "CreateDua",
+  SaveDua = "SaveDua",
+}
 
 function App() {
-  const [activeKey, setActiveKey] = useState("1");
-
-  const items: TabsProps["items"] = [
-    {
-      key: "1",
-      label: "Create a dua",
-      children: <CreateDua onSaveDua={() => setActiveKey("2")} />,
-    },
-    {
-      key: "2",
-      label: "Saved duas",
-      children: <SavedDuas />,
-    },
-  ];
+  const [activeKey, setActiveKey] = useState<KeyTypes>();
 
   return (
-    <div className="text-center">
-      <h1 className="font-bold text-shadow-lg text-shadow-neutral-600">
+    <VStack>
+      <Heading textShadow={"2xl"} size={"6xl"}>
         Rifah
-      </h1>
-      <p className="text-shadow-lg text-shadow-neutral-600">
-        Create your own <span className="text-violet-400">beautiful</span> dua
-      </p>
-      <Tabs
-        activeKey={activeKey}
-        centered
-        destroyInactiveTabPane
-        items={items}
-        onTabClick={(key) => setActiveKey(key)}
-      />
-    </div>
+      </Heading>
+      <Heading>
+        <Highlight query="beautiful" styles={{ color: colors.primary }}>
+          Create your own beautiful duas
+        </Highlight>
+      </Heading>
+      <Tabs.Root
+        variant={"subtle"}
+        lazyMount
+        defaultValue={KeyTypes.CreateDua}
+        value={activeKey}
+        unmountOnExit
+      >
+        <Tabs.List>
+          <Tabs.Trigger value={KeyTypes.CreateDua}>Creata a dua</Tabs.Trigger>
+          <Tabs.Trigger value={KeyTypes.SaveDua}>Saved duas</Tabs.Trigger>
+        </Tabs.List>
+        <Tabs.Content value={KeyTypes.CreateDua}>
+          <CreateDua onSaveDua={() => setActiveKey(KeyTypes.SaveDua)} />
+        </Tabs.Content>
+        <Tabs.Content value={KeyTypes.SaveDua}>
+          <SavedDuas />,
+        </Tabs.Content>
+      </Tabs.Root>
+    </VStack>
   );
 }
 
