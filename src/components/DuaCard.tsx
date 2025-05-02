@@ -6,11 +6,13 @@ import { Dua } from "../types";
  */
 type DuaCardProps = {
   title?: string;
+  onClick?: () => void;
   dua: Dua;
 };
-export default function DuaCard({ dua }: DuaCardProps) {
+export default function DuaCard({ dua, onClick }: DuaCardProps) {
   return (
     <Card
+      onClick={onClick}
       hoverable
       title={<div className="group-hover:text-violet-300">{dua.title}</div>}
     >

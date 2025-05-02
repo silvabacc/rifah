@@ -4,7 +4,7 @@ import { SavedDua } from "./types";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
 import DuaCard from "./components/DuaCard";
-import { Divider, Modal } from "antd";
+import { Button, Divider, Modal } from "antd";
 
 const SavedDuas = () => {
   const { getSavedDua } = useLocalStorage();
@@ -12,7 +12,7 @@ const SavedDuas = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [cards, setCards] = useState<SavedDua[]>([]);
 
-  const duaSelected = cards.find((card) => duaSelectedId === card.dua.id)
+  const duaSelected = cards.find((card) => duaSelectedId === card.dua.id);
 
   useEffect(() => {
     const savedDuas = getSavedDua();
@@ -21,31 +21,41 @@ const SavedDuas = () => {
 
   const onCardClick = (duaId: string) => {
     setModalOpen(true);
-    setDuaSelectedId(duaId)
-  }
+    setDuaSelectedId(duaId);
+  };
 
   return (
     <Masonry
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
       breakpointCols={3}
-      >
+    >
       {cards.map((card, index) => (
         <div
-        onClick={() => onCardClick(card.dua.id)}
-        className="rounded bord er border-transparent group transition-all duration-300"
-        key={`${card.duaName}-${index}`}
+          className="rounded bord er border-transparent group transition-all duration-300"
+          key={`${card.duaName}-${index}`}
         >
-          <DuaCard title={card.duaName} dua={card.dua} />
+          <DuaCard
+            onClick={() => onCardClick(card.dua.id)}
+            title={card.duaName}
+            dua={card.dua}
+          />
         </div>
       ))}
-      <Modal title={duaSelected?.duaName} open={modalOpen} closable onCancel={() => setModalOpen(false)}>
-      <Divider/>
-      <div className="flex justify-center flex-col text-center" >
-        <p>{duaSelected?.dua.arabic}</p>
-        <Divider/>
-        <p>{duaSelected?.dua.translation}</p>
-      </div>
+      <Modal
+        title={<div>{duaSelected?.duaName}</div>}
+        open={modalOpen}
+        closable
+        onCancel={() => setModalOpen(false)}
+        footer={null}
+      >
+        <Divider />
+        <div className="flex justify-center flex-col text-center">
+          <p>{duaSelected?.dua.arabic}</p>
+          <Divider />
+          <p>{duaSelected?.dua.translation}</p>
+          <Button className="mt-4 self-end">Edit</Button>
+        </div>
       </Modal>
     </Masonry>
   );
