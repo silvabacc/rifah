@@ -3,8 +3,9 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import { SavedDua } from "./types";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
-import DuaCard from "./components/DuaCard";
+import ColumnCard from "./components/ColumnCard";
 import { Button, Divider, Modal } from "antd";
+import DuaCardContent from "./components/ColumnCardContent";
 
 const SavedDuas = () => {
   const { getSavedDua } = useLocalStorage();
@@ -35,10 +36,12 @@ const SavedDuas = () => {
           className="rounded bord er border-transparent group transition-all duration-300"
           key={`${card.duaName}-${index}`}
         >
-          <DuaCard
+          <ColumnCard
             onClick={() => onCardClick(card.dua.id)}
-            title={card.duaName}
-            dua={card.dua}
+            cardContent={{
+              title: <div>{card.duaName}</div>,
+              content: <DuaCardContent dua={card.dua} />,
+            }}
           />
         </div>
       ))}
