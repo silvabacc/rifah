@@ -4,14 +4,16 @@ import { SavedDua } from "./types";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
 import ColumnCard from "./components/ColumnCard";
-import { Button, Divider, Modal } from "antd";
+import { Button, Divider, Drawer, Modal } from "antd";
 import DuaCardContent from "./components/ColumnCardContent";
+import EditDuas from "./EditDuas";
 
 const SavedDuas = () => {
   const { getSavedDua } = useLocalStorage();
   const [duaSelectedId, setDuaSelectedId] = useState<string>();
   const [modalOpen, setModalOpen] = useState(false);
   const [cards, setCards] = useState<SavedDua[]>([]);
+  const [drawOpen, setDrawOpen] = useState(false);
 
   const duaSelected = cards.find((card) => duaSelectedId === card.dua.id);
 
@@ -59,12 +61,17 @@ const SavedDuas = () => {
           <p>{duaSelected?.dua.translation}</p>
         </div>
         <div className="flex justify-end space-x-2 w-full">
-          <Button className="mt-4">Edit</Button>
+          <Button className="mt-4" onClick={() => setDrawOpen(true)}>
+            Edit
+          </Button>
           <Button type="primary" className="mt-4">
             Close
           </Button>
         </div>
       </Modal>
+      <Drawer width={"100%"} open={drawOpen} onClose={() => setDrawOpen(false)}>
+        {duaSelected && <EditDuas savedDua={duaSelected} />}
+      </Drawer>
     </Masonry>
   );
 };

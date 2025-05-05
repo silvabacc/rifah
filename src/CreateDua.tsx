@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import duasJson from "./data/duas.json";
-import { Alert, Button, Divider, Input } from "antd";
+import { Alert, Button, Input } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { CardType, Column } from "./components/Column";
 import { Dua } from "./types";
