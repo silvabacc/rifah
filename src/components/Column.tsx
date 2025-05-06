@@ -23,10 +23,15 @@ export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
   const filteredCards = cards.filter((c) => c.column === column);
 
   const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
+    e: React.DragEvent<HTMLDivElement> | MouseEvent | TouchEvent | PointerEvent,
     card: CardType<T>
   ) => {
-    e.dataTransfer.setData("cardId", card.id);
+    if ("dataTransfer" in e) {
+      (e as React.DragEvent<HTMLDivElement>).dataTransfer.setData(
+        "cardId",
+        card.id
+      );
+    }
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -135,7 +140,7 @@ export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
 
 type CardProps<T> = CardType<T> & {
   handleDragStart: (
-    e: React.DragEvent<HTMLDivElement>,
+    e: React.DragEvent<HTMLDivElement> | MouseEvent | TouchEvent | PointerEvent,
     card: CardType<T>
   ) => void;
 };
@@ -144,6 +149,7 @@ const MotionCard = <T,>({
   id,
   column,
   handleDragStart,
+  data,
   cardContent,
 }: CardProps<T>) => (
   <>
@@ -152,7 +158,7 @@ const MotionCard = <T,>({
       layout
       layoutId={id}
       draggable
-      onDragStart={(e) => handleDragStart(e, { id, column })}
+      onDragStart={(e) => handleDragStart(e, { id, column, data, cardContent })}
       className="group transition-all duration-300 cursor-grab active:cursor-grabbing"
     >
       <ColumnCard cardContent={cardContent} />
