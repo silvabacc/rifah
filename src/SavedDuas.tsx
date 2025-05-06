@@ -3,21 +3,26 @@ import { useLocalStorage } from "./hooks/useLocalStorage";
 import { SavedDua } from "./types";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
-import DuaCard from "./components/DuaCard";
-import { Button, Divider, Modal } from "antd";
+import ColumnCard from "./components/ColumnCard";
+import { Button, Divider, Drawer, Modal } from "antd";
+import DuaCardContent from "./components/ColumnCardContent";
+import EditDuas from "./EditDuas";
 
 const SavedDuas = () => {
-  const { getSavedDua } = useLocalStorage();
+  const { getSavedDuas } = useLocalStorage();
   const [duaSelectedId, setDuaSelectedId] = useState<string>();
   const [modalOpen, setModalOpen] = useState(false);
   const [cards, setCards] = useState<SavedDua[]>([]);
+  const [drawOpen, setDrawOpen] = useState(false);
 
   const duaSelected = cards.find((card) => duaSelectedId === card.dua.id);
 
   useEffect(() => {
-    const savedDuas = getSavedDua();
-    setCards(savedDuas);
-  }, []);
+    if (!drawOpen) {
+      const savedDuas = getSavedDuas();
+      setCards(savedDuas);
+    }
+  }, [drawOpen]);
 
   const onCardClick = (duaId: string) => {
     setModalOpen(true);
@@ -35,10 +40,12 @@ const SavedDuas = () => {
           className="rounded bord er border-transparent group transition-all duration-300"
           key={`${card.duaName}-${index}`}
         >
-          <DuaCard
+          <ColumnCard
             onClick={() => onCardClick(card.dua.id)}
-            title={card.duaName}
-            dua={card.dua}
+            cardContent={{
+              title: <div>{card.duaName}</div>,
+              content: <DuaCardContent dua={card.dua} />,
+            }}
           />
         </div>
       ))}
@@ -56,12 +63,24 @@ const SavedDuas = () => {
           <p>{duaSelected?.dua.translation}</p>
         </div>
         <div className="flex justify-end space-x-2 w-full">
-          <Button className="mt-4">Edit</Button>
+          <Button className="mt-4" onClick={() => setDrawOpen(true)}>
+            Edit
+          </Button>
           <Button type="primary" className="mt-4">
             Close
           </Button>
         </div>
       </Modal>
+      <Drawer
+        width={"100%"}
+        open={drawOpen}
+        onClose={() => setDrawOpen(false)}
+        destroyOnClose
+      >
+        {duaSelected && (
+          <EditDuas savedDua={duaSelected} close={() => setDrawOpen(false)} />
+        )}
+      </Drawer>
     </Masonry>
   );
 };
