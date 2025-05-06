@@ -30,25 +30,7 @@ const SavedDuas = () => {
   };
 
   return (
-    <Masonry
-      className="my-masonry-grid"
-      columnClassName="my-masonry-grid_column"
-      breakpointCols={3}
-    >
-      {cards.map((card, index) => (
-        <div
-          className="rounded bord er border-transparent group transition-all duration-300"
-          key={`${card.duaName}-${index}`}
-        >
-          <ColumnCard
-            onClick={() => onCardClick(card.dua.id)}
-            cardContent={{
-              title: <div>{card.duaName}</div>,
-              content: <DuaCardContent dua={card.dua} />,
-            }}
-          />
-        </div>
-      ))}
+    <div>
       <Modal
         title={<div>{duaSelected?.duaName}</div>}
         open={modalOpen}
@@ -81,7 +63,27 @@ const SavedDuas = () => {
           <EditDuas savedDua={duaSelected} close={() => setDrawOpen(false)} />
         )}
       </Drawer>
-    </Masonry>
+      <Masonry
+        className="my-masonry-grid"
+        columnClassName="my-masonry-grid_column"
+        breakpointCols={3}
+      >
+        {cards.map((card, index) => (
+          <div
+            className="rounded bord er border-transparent group transition-all duration-300"
+            key={`${card.duaName}-${index}`}
+          >
+            <ColumnCard
+              onClick={() => onCardClick(card.dua.id)}
+              cardContent={{
+                title: <div>{card.duaName}</div>,
+                content: <DuaCardContent dua={card.dua} />,
+              }}
+            />
+          </div>
+        ))}
+      </Masonry>
+    </div>
   );
 };
 

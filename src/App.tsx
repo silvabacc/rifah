@@ -20,7 +20,7 @@ function App() {
   ];
 
   return (
-    <div className="text-center">
+    <div className="text-center w-dvw pl-8 pr-8">
       <h1 className="font-bold text-shadow-lg text-shadow-neutral-600">
         Rifah
       </h1>
