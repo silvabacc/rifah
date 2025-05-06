@@ -3,7 +3,7 @@ import { CardType, Column } from "./components/Column";
 import duasJson from "./data/duas.json";
 import DuaCardContent from "./components/ColumnCardContent";
 import { Dua, SavedDua } from "./types";
-import { Alert, Button, Input, Space, Tooltip } from "antd";
+import { Alert, Button, Input, Space } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 
 enum ColumnName {
