@@ -3,6 +3,8 @@ import { CardType, Column } from "./components/Column";
 import duasJson from "./data/duas.json";
 import DuaCardContent from "./components/ColumnCardContent";
 import { Dua, SavedDua } from "./types";
+import { Alert, Button, Input, Space, Tooltip } from "antd";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 
 enum ColumnName {
   Duas = "duas",
@@ -11,9 +13,21 @@ enum ColumnName {
 
 type EditDuasProps = {
   savedDua: SavedDua;
+  close?: () => void;
 };
-export default function EditDuas({ savedDua }: EditDuasProps) {
+export default function EditDuas({ savedDua, close }: EditDuasProps) {
+  const { updateSavedDua } = useLocalStorage();
   const [cards, setCards] = useState<CardType<Dua>[]>([]);
+  const [duaName, setDuaName] = useState(savedDua.duaName);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!duaName) {
+      setError("Please name your dua");
+    } else {
+      setError("");
+    }
+  }, [duaName]);
 
   useEffect(() => {
     const initialDuas = duasJson.map((dua) => ({
@@ -28,7 +42,6 @@ export default function EditDuas({ savedDua }: EditDuasProps) {
 
     const duaCards = initialDuas.map((dua) => {
       const isAlreadySaved = savedDua.duas.some((sd) => sd.id === dua.id);
-      console.log(isAlreadySaved);
       if (isAlreadySaved) {
         return { ...dua, column: ColumnName.SavedDuas };
       }
@@ -36,11 +49,56 @@ export default function EditDuas({ savedDua }: EditDuasProps) {
     });
 
     setCards(duaCards);
-  }, []);
+  }, [savedDua]);
+
+  const onDuaSave = () => {
+    if (!duaName) {
+      return;
+    }
+
+    const updatedDuas = cards
+      .filter((card) => card.column === ColumnName.SavedDuas)
+      .map((card) => card.data);
+
+    const duaArabic = updatedDuas.reduce((acc, curr) => {
+      return acc.concat(" ", curr.arabic);
+    }, "");
+    const duaTranslation = updatedDuas.reduce((acc, curr) => {
+      return acc.concat(" ", curr.translation);
+    }, "");
+
+    updateSavedDua(savedDua.dua.id, {
+      duaName: duaName,
+      duas: updatedDuas,
+      dua: {
+        ...savedDua.dua,
+        arabic: duaArabic,
+        translation: duaTranslation,
+      },
+    });
+
+    close?.();
+  };
 
   return (
-    <div>
-      <div className="flex gap-4 pt-4">
+    <div className="space-y-4">
+      <div className="flex w-full">
+        <Input
+          className="flex-1"
+          placeholder="Dua name"
+          value={duaName}
+          onChange={(v) => setDuaName(v.currentTarget.value)}
+        />
+        <Space className="ml-2">
+          <Button onClick={close}>Cancel</Button>
+          <Button type="primary" onClick={onDuaSave}>
+            Save
+          </Button>
+        </Space>
+      </div>
+      {error && <Alert type="error" showIcon message={error} />}
+
+      <div className="flex gap-4 pt-2">
         <Column column={ColumnName.Duas} cards={cards} setCards={setCards} />
         <Column
           column={ColumnName.SavedDuas}

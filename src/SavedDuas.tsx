@@ -9,7 +9,7 @@ import DuaCardContent from "./components/ColumnCardContent";
 import EditDuas from "./EditDuas";
 
 const SavedDuas = () => {
-  const { getSavedDua } = useLocalStorage();
+  const { getSavedDuas } = useLocalStorage();
   const [duaSelectedId, setDuaSelectedId] = useState<string>();
   const [modalOpen, setModalOpen] = useState(false);
   const [cards, setCards] = useState<SavedDua[]>([]);
@@ -18,9 +18,11 @@ const SavedDuas = () => {
   const duaSelected = cards.find((card) => duaSelectedId === card.dua.id);
 
   useEffect(() => {
-    const savedDuas = getSavedDua();
-    setCards(savedDuas);
-  }, []);
+    if (!drawOpen) {
+      const savedDuas = getSavedDuas();
+      setCards(savedDuas);
+    }
+  }, [drawOpen]);
 
   const onCardClick = (duaId: string) => {
     setModalOpen(true);
@@ -69,8 +71,15 @@ const SavedDuas = () => {
           </Button>
         </div>
       </Modal>
-      <Drawer width={"100%"} open={drawOpen} onClose={() => setDrawOpen(false)}>
-        {duaSelected && <EditDuas savedDua={duaSelected} />}
+      <Drawer
+        width={"100%"}
+        open={drawOpen}
+        onClose={() => setDrawOpen(false)}
+        destroyOnClose
+      >
+        {duaSelected && (
+          <EditDuas savedDua={duaSelected} close={() => setDrawOpen(false)} />
+        )}
       </Drawer>
     </Masonry>
   );
