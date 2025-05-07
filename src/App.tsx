@@ -1,20 +1,21 @@
 import { Tabs, TabsProps } from "antd";
 import CreateDua from "./CreateDua";
 import SavedDuas from "./SavedDuas";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 function App() {
   const [activeKey, setActiveKey] = useState("1");
+  const ref = useRef(null);
 
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Create a dua",
-      children: <CreateDua onSaveDua={() => setActiveKey("2")} />,
+      children: <CreateDua ref={ref} onSaveDua={() => setActiveKey("2")} />,
     },
     {
       key: "2",
-      label: "Saved duas",
+      label: <div ref={ref}>Saved duas</div>,
       children: <SavedDuas />,
     },
   ];

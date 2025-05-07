@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, SetStateAction } from "react";
+import { Dispatch, ReactNode, Ref, SetStateAction } from "react";
 import { motion } from "framer-motion";
 import ColumnCard from "./ColumnCard";
 
@@ -17,9 +17,15 @@ type ColumnProps<T> = {
   searachable?: boolean;
   column: string;
   setCards: Dispatch<SetStateAction<CardType<T>[]>>;
+  ref?: Ref<HTMLInputElement>;
 };
 
-export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
+export const Column = <T,>({
+  cards,
+  column,
+  setCards,
+  ref,
+}: ColumnProps<T>) => {
   const filteredCards = cards.filter((c) => c.column === column);
 
   const handleDragStart = (
@@ -115,6 +121,7 @@ export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
 
   return (
     <div className="w-1/2">
+      <div ref={ref}></div>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}

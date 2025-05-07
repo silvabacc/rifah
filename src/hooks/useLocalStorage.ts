@@ -72,5 +72,20 @@ export const useLocalStorage = () => {
     localStorage.setItem("duas", JSON.stringify(removedDua));
   };
 
-  return { saveDua, getSavedDuas, updateSavedDua, deleteDua };
+  const getTutorial = () => {
+    return localStorage.getItem("tutorial") === "false";
+  };
+
+  const setTutorial = (value: boolean) => {
+    localStorage.setItem("tutorial", value ? "true" : "false");
+  };
+
+  return {
+    saveDua,
+    getSavedDuas,
+    updateSavedDua,
+    deleteDua,
+    getTutorial,
+    setTutorial,
+  };
 };

@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import duasJson from "./data/duas.json";
-import { Alert, Button, Input } from "antd";
+import { Alert, Button, Input, Tour } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { CardType, Column } from "./components/Column";
 import { Dua } from "./types";
 import DuaCardContent from "./components/ColumnCardContent";
+import { getCreateDuaSteps } from "./tutorial/createDuaTutorial";
 
 type CreateDuaProps = {
   onSaveDua?: () => void;
+  ref: RefObject<HTMLElement | null>;
 };
-export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
-  const { saveDua } = useLocalStorage();
+export default function CreateDua({ onSaveDua: onSave, ref }: CreateDuaProps) {
+  const { saveDua, setTutorial, getTutorial } = useLocalStorage();
   const [duaCards, setDuaCards] = useState<CardType<Dua>[]>([]);
   const [duaName, setDuaName] = useState("");
   const [error, setError] = useState("");
+  const [tutorialOpen, setTutorialOpen] = useState(!getTutorial());
+
+  // For tutorial
+  const ref1 = useRef(null);
+  const ref2 = useRef(null);
 
   useEffect(() => {
     const initialDuas = duasJson.map((dua) => ({
@@ -52,9 +59,21 @@ export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
     if (error) setError("");
   };
 
+  const onFinish = () => {
+    setTutorial(false);
+    setTutorialOpen(false);
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex">
+      <Tour
+        open={tutorialOpen}
+        onFinish={onFinish}
+        onClose={onFinish}
+        closable
+        steps={getCreateDuaSteps(ref1, ref2, ref)}
+      />
+      <div ref={ref1} className="flex">
         <Input
           value={duaName}
           onChange={onChange}
@@ -73,7 +92,12 @@ export default function CreateDua({ onSaveDua: onSave }: CreateDuaProps) {
         />
       )}
       <div className="flex gap-4 pt-4">
-        <Column column="duas" cards={duaCards} setCards={setDuaCards}></Column>
+        <Column
+          ref={ref2}
+          column="duas"
+          cards={duaCards}
+          setCards={setDuaCards}
+        ></Column>
         <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
       </div>
     </div>
