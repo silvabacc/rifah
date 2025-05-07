@@ -1,4 +1,4 @@
-import { Dispatch, ReactNode, Ref, SetStateAction } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 import { motion } from "framer-motion";
 import ColumnCard from "./ColumnCard";
 
@@ -17,15 +17,9 @@ type ColumnProps<T> = {
   searachable?: boolean;
   column: string;
   setCards: Dispatch<SetStateAction<CardType<T>[]>>;
-  ref?: Ref<HTMLInputElement>;
 };
 
-export const Column = <T,>({
-  cards,
-  column,
-  setCards,
-  ref,
-}: ColumnProps<T>) => {
+export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
   const filteredCards = cards.filter((c) => c.column === column);
 
   const handleDragStart = (
@@ -121,16 +115,19 @@ export const Column = <T,>({
 
   return (
     <div className="w-1/2">
-      <div ref={ref}></div>
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         className={`relative h-full  transition-colors space-y-4`}
       >
-        {filteredCards.map((c) => (
-          <MotionCard key={c.id} {...c} handleDragStart={handleDragStart} />
-        ))}
+        {filteredCards.map((c, index) => {
+          return (
+            <div id={`motion-card-${index}`} key={c.id}>
+              <MotionCard {...c} handleDragStart={handleDragStart} />
+            </div>
+          );
+        })}
 
         {showDragDropBox && (
           <div className="flex items-center cursor-default justify-center">

@@ -1,11 +1,10 @@
 import { TourProps } from "antd";
 import Azhar from "../assets/azhar.avif";
-import { RefObject } from "react";
 
 export const getCreateDuaSteps = (
-  ref1: RefObject<HTMLElement | null>,
-  ref2: RefObject<HTMLElement | null>,
-  ref3: RefObject<HTMLElement | null>
+  inputRef: HTMLElement | null,
+  motionCardEl: HTMLElement | null,
+  savedDuaTabRef: HTMLElement | null
 ): TourProps["steps"] => {
   return [
     {
@@ -52,17 +51,19 @@ export const getCreateDuaSteps = (
           can drag and drop in whichever order you like
         </div>
       ),
-      ...(ref2.current ? { target: () => ref2.current as HTMLElement } : {}),
+      ...(motionCardEl ? { target: () => motionCardEl as HTMLElement } : {}),
     },
     {
       title: "Name your dua",
       description: <div>Once you are happy, name your dua</div>,
-      ...(ref1.current ? { target: () => ref1.current as HTMLElement } : {}),
+      ...(inputRef ? { target: () => inputRef as HTMLElement } : {}),
     },
     {
       title: "Saved Duas",
       description: <div>You will be able to find your saved duas here!</div>,
-      ...(ref3.current ? { target: () => ref3.current as HTMLElement } : {}),
+      ...(savedDuaTabRef
+        ? { target: () => savedDuaTabRef as HTMLElement }
+        : {}),
     },
   ];
 };

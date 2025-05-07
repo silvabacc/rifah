@@ -5,17 +5,22 @@ import { useRef, useState } from "react";
 
 function App() {
   const [activeKey, setActiveKey] = useState("1");
-  const ref = useRef(null);
+  const savedTabRef = useRef(null);
 
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Create a dua",
-      children: <CreateDua ref={ref} onSaveDua={() => setActiveKey("2")} />,
+      children: (
+        <CreateDua
+          savedTabRef={savedTabRef}
+          onSaveDua={() => setActiveKey("2")}
+        />
+      ),
     },
     {
       key: "2",
-      label: <div ref={ref}>Saved duas</div>,
+      label: <div ref={savedTabRef}>Saved duas</div>,
       children: <SavedDuas />,
     },
   ];

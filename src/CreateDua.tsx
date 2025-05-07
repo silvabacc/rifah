@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 import duasJson from "./data/duas.json";
-import { Alert, Button, Input, Tour } from "antd";
+import { Alert, Button, Input, Tour, TourProps } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { CardType, Column } from "./components/Column";
 import { Dua } from "./types";
@@ -9,18 +9,21 @@ import { getCreateDuaSteps } from "./tutorial/createDuaTutorial";
 
 type CreateDuaProps = {
   onSaveDua?: () => void;
-  ref: RefObject<HTMLElement | null>;
+  savedTabRef: RefObject<HTMLElement | null>;
 };
-export default function CreateDua({ onSaveDua: onSave, ref }: CreateDuaProps) {
+export default function CreateDua({
+  onSaveDua: onSave,
+  savedTabRef,
+}: CreateDuaProps) {
   const { saveDua, setTutorial, getTutorial } = useLocalStorage();
   const [duaCards, setDuaCards] = useState<CardType<Dua>[]>([]);
   const [duaName, setDuaName] = useState("");
   const [error, setError] = useState("");
-  const [tutorialOpen, setTutorialOpen] = useState(!getTutorial());
+  const [tutorialOpen, setTutorialOpen] = useState(false);
+  const [steps, setSteps] = useState<TourProps["steps"]>([]);
 
   // For tutorial
   const ref1 = useRef(null);
-  const ref2 = useRef(null);
 
   useEffect(() => {
     const initialDuas = duasJson.map((dua) => ({
@@ -33,6 +36,24 @@ export default function CreateDua({ onSaveDua: onSave, ref }: CreateDuaProps) {
       },
     }));
     setDuaCards(initialDuas);
+  }, []);
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      const el = document.getElementById("motion-card-0");
+      if (el) {
+        setSteps(getCreateDuaSteps(ref1.current, el, savedTabRef.current));
+        setTutorialOpen(!getTutorial());
+        observer.disconnect();
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const onSaveDua = () => {
@@ -66,13 +87,6 @@ export default function CreateDua({ onSaveDua: onSave, ref }: CreateDuaProps) {
 
   return (
     <div className="space-y-4">
-      <Tour
-        open={tutorialOpen}
-        onFinish={onFinish}
-        onClose={onFinish}
-        closable
-        steps={getCreateDuaSteps(ref1, ref2, ref)}
-      />
       <div ref={ref1} className="flex">
         <Input
           value={duaName}
@@ -92,13 +106,15 @@ export default function CreateDua({ onSaveDua: onSave, ref }: CreateDuaProps) {
         />
       )}
       <div className="flex gap-4 pt-4">
-        <Column
-          ref={ref2}
-          column="duas"
-          cards={duaCards}
-          setCards={setDuaCards}
-        ></Column>
+        <Column column="duas" cards={duaCards} setCards={setDuaCards} />
         <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
+        <Tour
+          open={tutorialOpen}
+          onFinish={onFinish}
+          onClose={onFinish}
+          closable
+          steps={steps}
+        />
       </div>
     </div>
   );
