@@ -20,9 +20,9 @@ function App() {
   ];
 
   return (
-    <div className="text-center w-dvw pl-8 pr-8">
+    <div className="text-center w-full">
       <h1 className="font-bold text-shadow-lg text-shadow-neutral-600">
-        Rifah
+        Rifah 📿
       </h1>
       <p className="text-shadow-lg text-shadow-neutral-600">
         Create your own <span className="text-violet-400">beautiful</span> dua

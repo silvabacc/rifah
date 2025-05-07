@@ -65,5 +65,12 @@ export const useLocalStorage = () => {
     return [];
   };
 
-  return { saveDua, getSavedDuas, updateSavedDua };
+  const deleteDua = (duaId: string) => {
+    const duas = getSavedDuas();
+
+    const removedDua = duas.filter((dua) => dua.dua.id !== duaId);
+    localStorage.setItem("duas", JSON.stringify(removedDua));
+  };
+
+  return { saveDua, getSavedDuas, updateSavedDua, deleteDua };
 };

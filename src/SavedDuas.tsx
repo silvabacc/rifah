@@ -4,12 +4,20 @@ import { SavedDua } from "./types";
 import Masonry from "react-masonry-css";
 import "./SavedDuas.css";
 import ColumnCard from "./components/ColumnCard";
-import { Button, Divider, Drawer, Modal } from "antd";
+import {
+  Button,
+  Divider,
+  Drawer,
+  Empty,
+  Modal,
+  Popconfirm,
+  PopconfirmProps,
+} from "antd";
 import DuaCardContent from "./components/ColumnCardContent";
 import EditDuas from "./EditDuas";
 
 const SavedDuas = () => {
-  const { getSavedDuas } = useLocalStorage();
+  const { getSavedDuas, deleteDua } = useLocalStorage();
   const [duaSelectedId, setDuaSelectedId] = useState<string>();
   const [modalOpen, setModalOpen] = useState(false);
   const [cards, setCards] = useState<SavedDua[]>([]);
@@ -18,15 +26,22 @@ const SavedDuas = () => {
   const duaSelected = cards.find((card) => duaSelectedId === card.dua.id);
 
   useEffect(() => {
-    if (!drawOpen) {
+    if (!drawOpen || !modalOpen) {
       const savedDuas = getSavedDuas();
       setCards(savedDuas);
     }
-  }, [drawOpen]);
+  }, [drawOpen, modalOpen]);
 
   const onCardClick = (duaId: string) => {
     setModalOpen(true);
     setDuaSelectedId(duaId);
+  };
+
+  const confirm: PopconfirmProps["onConfirm"] = () => {
+    if (duaSelectedId) {
+      deleteDua(duaSelectedId);
+    }
+    setModalOpen(false);
   };
 
   return (
@@ -44,13 +59,24 @@ const SavedDuas = () => {
           <Divider />
           <p>{duaSelected?.dua.translation}</p>
         </div>
-        <div className="flex justify-end space-x-2 w-full">
-          <Button className="mt-4" onClick={() => setDrawOpen(true)}>
-            Edit
-          </Button>
-          <Button type="primary" className="mt-4">
-            Close
-          </Button>
+        <div className="flex justify-between space-x-2 w-full items-end">
+          <Popconfirm
+            title="Delete dua?"
+            description="Are you sure to delete this dua?"
+            onConfirm={confirm}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button danger>Delete</Button>
+          </Popconfirm>
+          <div className="space-x-2">
+            <Button className="mt-4" onClick={() => setDrawOpen(true)}>
+              Edit
+            </Button>
+            <Button type="primary" className="mt-4">
+              Close
+            </Button>
+          </div>
         </div>
       </Modal>
       <Drawer
@@ -63,6 +89,9 @@ const SavedDuas = () => {
           <EditDuas savedDua={duaSelected} close={() => setDrawOpen(false)} />
         )}
       </Drawer>
+      {!cards.length && (
+        <Empty className="mt-8" description={"You have no duas saved 😢"} />
+      )}
       <Masonry
         className="my-masonry-grid"
         columnClassName="my-masonry-grid_column"
