@@ -1,7 +1,5 @@
 # Rifah 📿
 
-# 🕌 Dua Builder App
-
 A modern **React + Vite** application that allows users to **build authentic personalized duʿās** by selecting from a collection of authentic supplications, arranging them in any order using drag-and-drop, and saving them for future use.
 
 ---
