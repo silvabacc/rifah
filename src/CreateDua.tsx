@@ -1,11 +1,13 @@
 import { RefObject, useEffect, useRef, useState } from "react";
 import duasJson from "./data/duas.json";
-import { Alert, Button, Input, Tour, TourProps } from "antd";
+import { Alert, Button, Divider, Input, Tour, TourProps } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { CardType, Column } from "./components/Column";
-import { Dua } from "./types";
+import { ColumnName, Dua } from "./types";
 import DuaCardContent from "./components/ColumnCardContent";
 import { getCreateDuaSteps } from "./tutorial/createDuaTutorial";
+
+const { Search } = Input;
 
 type CreateDuaProps = {
   onSaveDua?: () => void;
@@ -21,6 +23,7 @@ export default function CreateDua({
   const [error, setError] = useState("");
   const [tutorialOpen, setTutorialOpen] = useState(false);
   const [steps, setSteps] = useState<TourProps["steps"]>([]);
+  const [search, setSearch] = useState<string>("");
 
   // For tutorial
   const ref1 = useRef(null);
@@ -29,7 +32,7 @@ export default function CreateDua({
     const initialDuas = duasJson.map((dua) => ({
       data: dua,
       id: dua.id,
-      column: "duas",
+      column: ColumnName.Duas,
       cardContent: {
         title: dua.title,
         content: <DuaCardContent dua={dua} />,
@@ -61,7 +64,7 @@ export default function CreateDua({
       setError("Please name your dua");
       return;
     }
-    const selected = duaCards.filter((c) => c.column === "savedduas");
+    const selected = duaCards.filter((c) => c.column === ColumnName.SavedDuas);
     if (selected.length === 0) {
       setError("You haven't selected any duas");
       return;
@@ -85,6 +88,13 @@ export default function CreateDua({
     setTutorialOpen(false);
   };
 
+  const searchFilter = (card: CardType<Dua>) => {
+    return (
+      card.data.translation.toLowerCase().includes(search?.toLowerCase()) ||
+      card.data.arabic.toLowerCase().includes(search?.toLowerCase())
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div ref={ref1} className="flex">
@@ -105,9 +115,25 @@ export default function CreateDua({
           message={error}
         />
       )}
-      <div className="flex gap-4 pt-4">
-        <Column column="duas" cards={duaCards} setCards={setDuaCards} />
-        <Column column="savedduas" cards={duaCards} setCards={setDuaCards} />
+      <Divider />
+      <div className="w-1/2">
+        <Search
+          onChange={(v) => setSearch(v.currentTarget.value)}
+          placeholder="Search dua..."
+        />
+      </div>
+      <div className="flex gap-4">
+        <Column
+          column={ColumnName.Duas}
+          cards={duaCards.filter(searchFilter)}
+          setCards={setDuaCards}
+          showEmptyMessage={false}
+        />
+        <Column
+          column={ColumnName.SavedDuas}
+          cards={duaCards}
+          setCards={setDuaCards}
+        />
         <Tour
           open={tutorialOpen}
           onFinish={onFinish}

@@ -16,10 +16,16 @@ type ColumnProps<T> = {
   cards: CardType<T>[];
   searachable?: boolean;
   column: string;
+  showEmptyMessage?: boolean;
   setCards: Dispatch<SetStateAction<CardType<T>[]>>;
 };
 
-export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
+export const Column = <T,>({
+  cards,
+  column,
+  showEmptyMessage = true,
+  setCards,
+}: ColumnProps<T>) => {
   const filteredCards = cards.filter((c) => c.column === column);
 
   const handleDragStart = (
@@ -129,10 +135,10 @@ export const Column = <T,>({ cards, column, setCards }: ColumnProps<T>) => {
           );
         })}
 
-        {showDragDropBox && (
+        {showEmptyMessage && showDragDropBox && (
           <div className="flex items-center cursor-default justify-center">
             <p className="text-neutral-500 font-bold text-lg">
-              Drag and drop duas here
+              Drag and drop here
             </p>
           </div>
         )}

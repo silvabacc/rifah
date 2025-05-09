@@ -12,3 +12,8 @@ export type SavedDua = {
   duas: Dua[];
   dua: Dua;
 };
+
+export enum ColumnName {
+  Duas = "duas",
+  SavedDuas = "savedduas",
+}

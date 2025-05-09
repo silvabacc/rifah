@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import { CardType, Column } from "./components/Column";
 import duasJson from "./data/duas.json";
 import DuaCardContent from "./components/ColumnCardContent";
-import { Dua, SavedDua } from "./types";
+import { ColumnName, Dua, SavedDua } from "./types";
 import { Alert, Button, Input, Space } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
-
-enum ColumnName {
-  Duas = "duas",
-  SavedDuas = "savedduas",
-}
 
 type EditDuasProps = {
   savedDua: SavedDua;
