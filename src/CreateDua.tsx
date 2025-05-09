@@ -6,6 +6,7 @@ import { CardType, Column } from "./components/Column";
 import { ColumnName, Dua } from "./types";
 import DuaCardContent from "./components/ColumnCardContent";
 import { getCreateDuaSteps } from "./tutorial/createDuaTutorial";
+import { searchFilter } from "./utils";
 
 const { Search } = Input;
 
@@ -88,13 +89,6 @@ export default function CreateDua({
     setTutorialOpen(false);
   };
 
-  const searchFilter = (card: CardType<Dua>) => {
-    return (
-      card.data.translation.toLowerCase().includes(search?.toLowerCase()) ||
-      card.data.arabic.toLowerCase().includes(search?.toLowerCase())
-    );
-  };
-
   return (
     <div className="space-y-4">
       <div ref={ref1} className="flex">
@@ -125,7 +119,7 @@ export default function CreateDua({
       <div className="flex gap-4">
         <Column
           column={ColumnName.Duas}
-          cards={duaCards.filter(searchFilter)}
+          cards={duaCards.filter((card) => searchFilter(card, search))}
           setCards={setDuaCards}
           showEmptyMessage={false}
         />

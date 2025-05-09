@@ -3,8 +3,11 @@ import { CardType, Column } from "./components/Column";
 import duasJson from "./data/duas.json";
 import DuaCardContent from "./components/ColumnCardContent";
 import { ColumnName, Dua, SavedDua } from "./types";
-import { Alert, Button, Input, Space } from "antd";
+import { Alert, Button, Divider, Input, Space } from "antd";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { searchFilter } from "./utils";
+
+const { Search } = Input;
 
 type EditDuasProps = {
   savedDua: SavedDua;
@@ -15,6 +18,7 @@ export default function EditDuas({ savedDua, close }: EditDuasProps) {
   const [cards, setCards] = useState<CardType<Dua>[]>([]);
   const [duaName, setDuaName] = useState(savedDua.duaName);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState<string>("");
 
   useEffect(() => {
     if (!duaName) {
@@ -76,7 +80,7 @@ export default function EditDuas({ savedDua, close }: EditDuasProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div>
       <div className="flex w-full">
         <Input
           className="flex-1"
@@ -92,9 +96,19 @@ export default function EditDuas({ savedDua, close }: EditDuasProps) {
         </Space>
       </div>
       {error && <Alert type="error" showIcon message={error} />}
-
-      <div className="flex gap-4 pt-2">
-        <Column column={ColumnName.Duas} cards={cards} setCards={setCards} />
+      <Divider />
+      <div className="w-1/2 pb-4">
+        <Search
+          onChange={(v) => setSearch(v.currentTarget.value)}
+          placeholder="Search dua..."
+        />
+      </div>
+      <div className="flex gap-4">
+        <Column
+          column={ColumnName.Duas}
+          cards={cards.filter((card) => searchFilter(card, search))}
+          setCards={setCards}
+        />
         <Column
           column={ColumnName.SavedDuas}
           cards={cards}
