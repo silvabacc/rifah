@@ -1,54 +1,39 @@
-# React + TypeScript + Vite
+# Rifah 📿
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![alt text](https://lp-cms-production.imgix.net/2023-07/shutterstockRF189401819.jpg?w=1920&h=640&fit=crop&crop=faces%2Cedges&auto=format&q=75)
 
-Currently, two official plugins are available:
+A modern **React + Vite** application that allows users to **build authentic personalized duʿās** by selecting from a collection of authentic supplications, arranging them in any order using drag-and-drop, and saving them for future use.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## ✨ Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🕋 **Authentic Duʿās** sourced from the Qur’an and Sunnah  
+- 🧩 **Drag and Drop Interface** to reorder duʿās as desired  
+- 💾 **Save Custom Duʿās** using local storage (cloud sync optional)  
+- 🌙 **Arabic and English Display** with clean, minimalist design
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🚀 Getting Started
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/dua-builder.git
+cd rifah
+
+# Install dependencies
+yarn install
+
+# Run the app
+yarn dev
